@@ -399,7 +399,7 @@ const CLUB_TITLES = [
 const MILESTONES = [1, 7, 30, 50, 100, 200, 365];
 const FEATURE_GUIDE = [
     { title: 'Home', text: 'Your personal dashboard: Club Pulse, weekly challenge, streak, next milestone, today’s prompt, today’s check-in, risk warnings, and recent club activity.' },
-    { title: 'Activity', text: 'The social feed: every check-in, comments, reactions, filters, and one useful AI Fact of the Day.' },
+    { title: 'Activity', text: 'The social feed: daily logs, activity posts, achievement updates, today summary, member spotlight, AI Fact of the Day, and a tech joke of the day.' },
     { title: 'Board', text: 'Club leaderboard, Hall of Fame, member progress, badge dots, streaks, total progress, and who is leading.' },
     { title: 'Journey', text: 'The shared 365-day club map. Everyone appears on the same path with a unique token. Daily Logs move you forward; Activity Posts do not. Tap any token to open that member profile.' },
     { title: 'Log', text: 'Your personal 365-day map and full history. Green squares mean completed days. You can edit or delete old logs from here.' },
@@ -411,7 +411,7 @@ const FEATURE_GUIDE = [
     { title: 'Member Profiles', text: 'Tap any member to see their title, lore, badges, streak, progress, recent check-ins, and 365-day map.' },
     { title: 'Badges & Titles', text: 'Badges unlock automatically from progress and streaks. Titles move from New Recruit to Legend as members build consistency. Badge pop-ups appear with confetti when earned.' },
     { title: 'Notifications', text: 'The bell shows reactions, comments, nudges, At Risk alerts, and vote updates.' },
-    { title: 'Wordle', text: 'A daily AI-themed Wordle appears on Home. Each member can play once per day. Results show inside the Board scoreboard, and Wordle badges unlock inside the normal Badge Vault.' },
+    { title: 'Wordle', text: 'A daily AI-themed Wordle appears on Home. Each member can play once per day. Results show a fun performance card instead of generic word facts, and today’s scores appear on Board.' },
     { title: 'Nudges', text: 'Send a friendly nudge directly from the Board streak leaderboard, or from a member profile, to remind someone to complete Claude Club today. The nudged member gets a notification and pop-up.' },
     { title: 'At Risk, Charles Review & Alumni', text: 'Members inactive for more than 2 days are flagged together in one Activity notice. Only Charles can choose Keep or Remove, and he can restore someone from the Alumni Graveyard.' },
     { title: 'Animations & Photos', text: 'The app uses confetti for daily logs, badge pop-ups for awards, cute illustrated badge art, and profile photo upload if members want their real picture.' }
@@ -433,6 +433,214 @@ function getAIFactOfDay() {
     const strategy = AI_FACT_STRATEGIES[Math.floor(day / AI_FACT_TASKS.length) % AI_FACT_STRATEGIES.length];
     return `When using AI for ${task}, you will usually get a better result if you ${strategy}.`;
 }
+const TECH_JOKES = [
+    "I asked AI for a tiny fix and it came back with a life plan.",
+    "The app worked perfectly until someone said, 'quick change'.",
+    "My code has two moods: working, and character development.",
+    "I don't debug code. I negotiate with it until it becomes reasonable.",
+    "Nothing says confidence like deploying a file called final-final-actually-final.html.",
+    "The browser console is just my app speaking in riddles.",
+    "AI said the fix was simple. That was the first lie.",
+    "I asked for one button and accidentally built a platform.",
+    "The real full-stack experience is fear, refresh, and hope.",
+    "My app is powered by React, Supabase, Cloudflare, and mild panic.",
+    "If it works after refresh, do not ask questions. Let it live.",
+    "The bug disappeared, which is suspicious but welcome.",
+    "I love when code says 'unexpected token' like I invited it personally.",
+    "GitHub commits are just diary entries with consequences.",
+    "Cloudflare deploying successfully is my version of fireworks.",
+    "Every small feature has the energy of a side quest.",
+    "I asked AI to simplify the app and it added three tabs.",
+    "A good prompt saves time. A bad prompt starts a meeting.",
+    "The app is one file held together by ambition and reloads.",
+    "My development process is copy, paste, pray, refresh.",
+    "AI is a brilliant assistant with the memory of a goldfish unless you give context.",
+    "The database was healthy, which is not the same as emotionally supportive.",
+    "I opened Supabase and immediately became a backend engineer against my will.",
+    "The frontend looked calm while the backend was doing parkour.",
+    "White screen of death: minimalist design, maximum trauma.",
+    "The best feature is the one that works on everyone else's phone too.",
+    "I told Claude to be careful. It returned 400 lines with confidence.",
+    "If the fix says 'just replace the file', prepare snacks.",
+    "My app has more versions than some movie franchises.",
+    "I don't have bugs, I have surprise learning modules.",
+    "The login worked once, so naturally I trusted it with my whole day.",
+    "Browser cache: keeping old mistakes alive since forever.",
+    "The code compiled, which felt personal.",
+    "AI doesn't replace developers. It creates new kinds of panic faster.",
+    "I asked for a clean dashboard. Now it has lore.",
+    "A streak tracker going down is deeply ironic.",
+    "The real bootcamp is learning why the thing that worked yesterday is broken today.",
+    "I love technology. It gives me problems I would never have had naturally.",
+    "The app says loading. I say emotionally preparing.",
+    "A missing lowercase letter humbled the whole deployment pipeline.",
+    "Claude said it was a small change and then rewired its personality.",
+    "ChatGPT made me learn a new tool I did not plan to learn.",
+    "the app successfully tested my patience, not the feature.",
+    "GitHub waited until everyone was watching before breaking.",
+    "Supabase made the phrase 'quick update' feel threatening.",
+    "Cloudflare turned one tiny issue into a technical education.",
+    "the database introduced me to a new error message with no social skills.",
+    "the login button became stable only after I stopped trusting it.",
+    "the Wordle feature was one refresh away from either success or mystery.",
+    "the leaderboard looked simple from the outside and dramatic from the inside.",
+    "the prompt needed context like I need coffee.",
+    "the browser needed one fix and requested a whole character arc.",
+    "the deployment proved that confidence is not the same as correctness.",
+    "the bug worked perfectly until I showed it to another person.",
+    "the cache was fine in theory and chaotic in production.",
+    "the console said it was a small change and then rewired its personality.",
+    "the dashboard made me learn a new tool I did not plan to learn.",
+    "the AI assistant successfully tested my patience, not the feature.",
+    "the commit waited until everyone was watching before breaking.",
+    "the auth flow made the phrase 'quick update' feel threatening.",
+    "Claude turned one tiny issue into a technical education.",
+    "ChatGPT introduced me to a new error message with no social skills.",
+    "the app became stable only after I stopped trusting it.",
+    "GitHub was one refresh away from either success or mystery.",
+    "Supabase looked simple from the outside and dramatic from the inside.",
+    "Cloudflare needed context like I need coffee.",
+    "the database needed one fix and requested a whole character arc.",
+    "the login button proved that confidence is not the same as correctness.",
+    "the Wordle feature worked perfectly until I showed it to another person.",
+    "the leaderboard was fine in theory and chaotic in production.",
+    "the prompt said it was a small change and then rewired its personality.",
+    "the browser made me learn a new tool I did not plan to learn.",
+    "the deployment successfully tested my patience, not the feature.",
+    "the bug waited until everyone was watching before breaking.",
+    "the cache made the phrase 'quick update' feel threatening.",
+    "the console turned one tiny issue into a technical education.",
+    "the dashboard introduced me to a new error message with no social skills.",
+    "the AI assistant became stable only after I stopped trusting it.",
+    "the commit was one refresh away from either success or mystery.",
+    "the auth flow looked simple from the outside and dramatic from the inside.",
+    "Claude needed context like I need coffee.",
+    "ChatGPT needed one fix and requested a whole character arc.",
+    "the app proved that confidence is not the same as correctness.",
+    "GitHub worked perfectly until I showed it to another person.",
+    "Supabase was fine in theory and chaotic in production.",
+    "Cloudflare said it was a small change and then rewired its personality.",
+    "the database made me learn a new tool I did not plan to learn.",
+    "the login button successfully tested my patience, not the feature.",
+    "the Wordle feature waited until everyone was watching before breaking.",
+    "the leaderboard made the phrase 'quick update' feel threatening.",
+    "the prompt turned one tiny issue into a technical education.",
+    "the browser introduced me to a new error message with no social skills.",
+    "the deployment became stable only after I stopped trusting it.",
+    "the bug was one refresh away from either success or mystery.",
+    "the cache looked simple from the outside and dramatic from the inside.",
+    "the console needed context like I need coffee.",
+    "the dashboard needed one fix and requested a whole character arc.",
+    "the AI assistant proved that confidence is not the same as correctness.",
+    "the commit worked perfectly until I showed it to another person.",
+    "the auth flow was fine in theory and chaotic in production.",
+    "Claude said it was a small change and then rewired its personality.",
+    "ChatGPT made me learn a new tool I did not plan to learn.",
+    "the app successfully tested my patience, not the feature.",
+    "GitHub waited until everyone was watching before breaking.",
+    "Supabase made the phrase 'quick update' feel threatening.",
+    "Cloudflare turned one tiny issue into a technical education.",
+    "the database introduced me to a new error message with no social skills.",
+    "the login button became stable only after I stopped trusting it.",
+    "the Wordle feature was one refresh away from either success or mystery.",
+    "the leaderboard looked simple from the outside and dramatic from the inside.",
+    "the prompt needed context like I need coffee.",
+    "the browser needed one fix and requested a whole character arc.",
+    "the deployment proved that confidence is not the same as correctness.",
+    "the bug worked perfectly until I showed it to another person.",
+    "the cache was fine in theory and chaotic in production.",
+    "the console said it was a small change and then rewired its personality.",
+    "the dashboard made me learn a new tool I did not plan to learn.",
+    "the AI assistant successfully tested my patience, not the feature.",
+    "the commit waited until everyone was watching before breaking.",
+    "the auth flow made the phrase 'quick update' feel threatening.",
+    "Claude turned one tiny issue into a technical education.",
+    "ChatGPT introduced me to a new error message with no social skills.",
+    "the app became stable only after I stopped trusting it.",
+    "GitHub was one refresh away from either success or mystery.",
+    "Supabase looked simple from the outside and dramatic from the inside.",
+    "Cloudflare needed context like I need coffee.",
+    "the database needed one fix and requested a whole character arc.",
+    "the login button proved that confidence is not the same as correctness.",
+    "the Wordle feature worked perfectly until I showed it to another person.",
+    "the leaderboard was fine in theory and chaotic in production.",
+    "the prompt said it was a small change and then rewired its personality.",
+    "the browser made me learn a new tool I did not plan to learn.",
+    "the deployment successfully tested my patience, not the feature.",
+    "the bug waited until everyone was watching before breaking.",
+    "the cache made the phrase 'quick update' feel threatening.",
+    "the console turned one tiny issue into a technical education.",
+    "the dashboard introduced me to a new error message with no social skills.",
+    "the AI assistant became stable only after I stopped trusting it.",
+    "the commit was one refresh away from either success or mystery.",
+    "the auth flow looked simple from the outside and dramatic from the inside.",
+    "Claude needed context like I need coffee.",
+    "ChatGPT needed one fix and requested a whole character arc.",
+    "the app proved that confidence is not the same as correctness.",
+    "GitHub worked perfectly until I showed it to another person.",
+    "Supabase was fine in theory and chaotic in production.",
+    "Cloudflare said it was a small change and then rewired its personality.",
+    "the database made me learn a new tool I did not plan to learn.",
+    "the login button successfully tested my patience, not the feature.",
+    "the Wordle feature waited until everyone was watching before breaking.",
+    "the leaderboard made the phrase 'quick update' feel threatening.",
+    "the prompt turned one tiny issue into a technical education.",
+    "the browser introduced me to a new error message with no social skills.",
+    "the deployment became stable only after I stopped trusting it.",
+    "the bug was one refresh away from either success or mystery.",
+    "the cache looked simple from the outside and dramatic from the inside.",
+    "the console needed context like I need coffee.",
+    "the dashboard needed one fix and requested a whole character arc.",
+    "the AI assistant proved that confidence is not the same as correctness.",
+    "the commit worked perfectly until I showed it to another person.",
+    "the auth flow was fine in theory and chaotic in production.",
+    "Claude said it was a small change and then rewired its personality.",
+    "ChatGPT made me learn a new tool I did not plan to learn.",
+    "the app successfully tested my patience, not the feature.",
+    "GitHub waited until everyone was watching before breaking.",
+    "Supabase made the phrase 'quick update' feel threatening.",
+    "Cloudflare turned one tiny issue into a technical education.",
+    "the database introduced me to a new error message with no social skills.",
+    "the login button became stable only after I stopped trusting it.",
+    "the Wordle feature was one refresh away from either success or mystery.",
+    "the leaderboard looked simple from the outside and dramatic from the inside.",
+    "the prompt needed context like I need coffee.",
+    "the browser needed one fix and requested a whole character arc.",
+    "the deployment proved that confidence is not the same as correctness.",
+    "the bug worked perfectly until I showed it to another person.",
+    "the cache was fine in theory and chaotic in production.",
+    "the console said it was a small change and then rewired its personality.",
+    "the dashboard made me learn a new tool I did not plan to learn.",
+    "the AI assistant successfully tested my patience, not the feature.",
+    "the commit waited until everyone was watching before breaking.",
+    "the auth flow made the phrase 'quick update' feel threatening.",
+    "Claude turned one tiny issue into a technical education.",
+    "ChatGPT introduced me to a new error message with no social skills.",
+    "the app became stable only after I stopped trusting it.",
+    "GitHub was one refresh away from either success or mystery.",
+    "Supabase looked simple from the outside and dramatic from the inside.",
+    "Cloudflare needed context like I need coffee.",
+    "the database needed one fix and requested a whole character arc.",
+    "the login button proved that confidence is not the same as correctness.",
+    "the Wordle feature worked perfectly until I showed it to another person.",
+    "the leaderboard was fine in theory and chaotic in production.",
+    "the prompt said it was a small change and then rewired its personality.",
+    "the browser made me learn a new tool I did not plan to learn.",
+    "the deployment successfully tested my patience, not the feature.",
+    "the bug waited until everyone was watching before breaking.",
+    "the cache made the phrase 'quick update' feel threatening.",
+    "the console turned one tiny issue into a technical education.",
+    "the dashboard introduced me to a new error message with no social skills.",
+    "the AI assistant became stable only after I stopped trusting it.",
+    "the commit was one refresh away from either success or mystery.",
+    "the auth flow looked simple from the outside and dramatic from the inside."
+];
+function getJokeOfDay() {
+    const start = new Date(2026, 0, 1), now = new Date(), local = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const day = Math.max(0, Math.floor((local - start) / 86400000));
+    return TECH_JOKES[day % TECH_JOKES.length];
+}
+
 function todayStr(date = new Date()) { const y = date.getFullYear(); const m = String(date.getMonth() + 1).padStart(2, '0'); const d = String(date.getDate()).padStart(2, '0'); return `${y}-${m}-${d}`; }
 function daysSince(d) { if (!d)
     return 999; return Math.floor((Date.now() - new Date(d)) / 86400000); }
@@ -1679,6 +1887,40 @@ function Dashboard({ memberId, memberData, checkins, allMembers, allCheckins, co
         const badgesEarned = CLUB_MEMBERS.reduce((sum, m) => sum + ((getDerivedMember(m.id).badges || []).length), 0);
         return { rows, topId, badgesEarned };
     }
+
+    function getTodaySummary() {
+        const todayRows = (allCheckins || []).filter(c => c.checkin_date === today && c.post_type !== 'system');
+        const daily = todayRows.filter(c => isDailyRow(c)).length;
+        const extra = todayRows.filter(c => c.post_type === 'activity').length;
+        const commentsToday = (comments || []).filter(c => (c.created_at || '').slice(0, 10) === today).length;
+        const nudgesToday = (notifications || []).filter(n => n.type === 'nudge' && (n.created_at || '').slice(0, 10) === today).length;
+        return { total: daily + extra, daily, extra, commentsToday, nudgesToday };
+    }
+    function getAchievementHighlights() {
+        const lines = [];
+        const todayDaily = (allCheckins || []).filter(c => c.checkin_date === today && isDailyRow(c));
+        todayDaily.forEach(c => {
+            const m = getDerivedMember(c.member_id);
+            const d = Number(c.day_number || m.current_day || m.total_days || 0);
+            if ([1, 7, 10, 20, 30, 50, 75, 100, 200, 365].includes(d)) lines.push(`${m.name} reached Day ${d}.`);
+            if ((c.note || '').toLowerCase().includes('wordle')) lines.push(`${m.name} shared a Wordle update.`);
+        });
+        const weekTop = recap.topId ? getDerivedMember(recap.topId) : null;
+        if (weekTop) lines.push(`${weekTop.name} is the most active member this week.`);
+        const streakLead = getLeaderboard('streak')[0];
+        if (streakLead && (streakLead.streak || 0) > 0) lines.push(`${streakLead.name} currently has the longest streak: ${streakLead.streak} day${streakLead.streak === 1 ? '' : 's'}.`);
+        return [...new Set(lines)].slice(0, 4);
+    }
+    function getMemberSpotlight() {
+        const active = CLUB_MEMBERS.map(m => getDerivedMember(m.id)).filter(m => m.status !== 'alumni');
+        const sorted = active.sort((a, b) => (Number(b.total_days) || 0) - (Number(a.total_days) || 0));
+        const pick = sorted.length ? sorted[(new Date().getDate() - 1) % sorted.length] : getDerivedMember(memberId);
+        return {
+            ...pick,
+            line: `${pick.name} is on Day ${pick.current_day || pick.total_days || 0} as a ${getClubTitle(pick)}.`
+        };
+    }
+
     function memberLore(md, rows) {
         const name = md.name || 'This member';
         const last = md.last_checkin ? (md.last_checkin === today ? 'today' : `${daysSince(md.last_checkin)} days ago`) : 'never';
@@ -1917,6 +2159,10 @@ function Dashboard({ memberId, memberData, checkins, allMembers, allCheckins, co
     const clubMood = getClubMood();
     const myTitle = getClubTitle(displayMemberData);
     const warnings = riskWarnings();
+    const todaySummary = getTodaySummary();
+    const achievementHighlights = getAchievementHighlights();
+    const spotlight = getMemberSpotlight();
+    const challengeCompleters = CLUB_MEMBERS.map(m => getDerivedMember(m.id)).filter(m => challengeDoneBy(m.id));
     function pulseDetails(kind) {
         const weekCut = new Date(Date.now() - 7 * 86400000);
         const weekRows = (allCheckins || []).filter(c => new Date(c.created_at || c.checkin_date) >= weekCut);
@@ -2286,11 +2532,16 @@ function Dashboard({ memberId, memberData, checkins, allMembers, allCheckins, co
                 React.createElement("div", { style: { ...s.card, borderColor: '#c9c2f0' }, className: challengeDoneBy(memberId) ? 'shine' : 'pop-in' },
                     React.createElement("div", { style: s.lbl }, "Weekly Club Challenge"),
                     React.createElement("div", { style: { fontSize: '15px', color: '#1a1a2e', fontWeight: 800, lineHeight: 1.4, marginBottom: '8px' } }, weeklyChallenge.text),
-                    React.createElement("div", { style: { fontSize: '12px', color: '#8888aa', marginBottom: '10px' } },
+                    React.createElement("div", { style: { fontSize: '12px', color: '#8888aa', marginBottom: '8px' } },
                         weeklyDoneCount,
                         "/",
                         pulse.active,
                         " active members completed this week"),
+                    React.createElement("div", { style: { height: '8px', background: '#f0ede8', borderRadius: '999px', overflow: 'hidden', marginBottom: '8px' } },
+                        React.createElement("div", { style: { height: '100%', width: `${Math.min(100, Math.round((weeklyDoneCount / Math.max(1, pulse.active)) * 100))}%`, background: 'linear-gradient(90deg,#7c6af7,#6af7b8)', borderRadius: '999px' } })),
+                    challengeCompleters.length > 0 && React.createElement("div", { style: { display: 'flex', gap: '5px', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap' } },
+                        challengeCompleters.slice(0, 8).map(m => React.createElement(AvatarCircle, { key: m.id, avatarId: m.avatar_id, color: m.avatar_color, size: 24 })),
+                        challengeCompleters.length > 8 && React.createElement("span", { style: { fontSize: '11px', color: '#8888aa', fontWeight: 800 } }, `+${challengeCompleters.length - 8} more`)),
                     React.createElement("button", { onClick: completeWeeklyChallenge, disabled: isAlumni || challengeDoneBy(memberId), style: challengeDoneBy(memberId) ? s.btnOff : s.btn }, challengeDoneBy(memberId) ? 'Challenge completed' : 'Mark weekly challenge done')),
                 React.createElement("div", { style: s.card },
                     React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' } },
@@ -2373,6 +2624,28 @@ function Dashboard({ memberId, memberData, checkins, allMembers, allCheckins, co
                             health,
                             "%")))),
             view === 'feed' && React.createElement(React.Fragment, null,
+                React.createElement("div", { style: { ...s.card, background: 'linear-gradient(135deg,#fff,#f7f5ff)' }, className: "card-pop-soft" },
+                    React.createElement("div", { style: s.lbl }, "What changed today"),
+                    React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '7px' } },
+                        React.createElement("div", { style: s.stat }, React.createElement("div", { style: s.sNum }, todaySummary.total), React.createElement("div", { style: s.sSub }, "Updates")),
+                        React.createElement("div", { style: s.stat }, React.createElement("div", { style: s.sNum }, todaySummary.daily), React.createElement("div", { style: s.sSub }, "Logs")),
+                        React.createElement("div", { style: s.stat }, React.createElement("div", { style: s.sNum }, todaySummary.extra), React.createElement("div", { style: s.sSub }, "Extra")),
+                        React.createElement("div", { style: s.stat }, React.createElement("div", { style: s.sNum }, todaySummary.commentsToday), React.createElement("div", { style: s.sSub }, "Comments"))),
+                    React.createElement("div", { style: { fontSize: '12px', color: '#666688', marginTop: '10px', lineHeight: 1.55 } }, `${todaySummary.daily} daily logs, ${todaySummary.extra} extra posts, and ${todaySummary.commentsToday} comments so far today.`)),
+                React.createElement("div", { style: { ...s.card, borderColor: '#f7c86a', background: 'linear-gradient(135deg,#fffaf0,#fff)' }, className: "card-pop-soft" },
+                    React.createElement("div", { style: s.lbl }, "Tech joke of the day"),
+                    React.createElement("div", { style: { fontSize: '14px', color: '#1a1a2e', lineHeight: 1.55, fontWeight: 800 } }, getJokeOfDay())),
+                achievementHighlights.length > 0 && React.createElement("div", { style: { ...s.card, borderColor: '#6af7b8' }, className: "card-pop-soft" },
+                    React.createElement("div", { style: s.lbl }, "Achievement updates"),
+                    achievementHighlights.map((line, i) => React.createElement("div", { key: i, style: { fontSize: '13px', color: '#444466', lineHeight: 1.55, padding: '7px 0', borderTop: i ? '1px solid #f7f5f2' : '0' } }, line))),
+                spotlight && React.createElement("div", { style: { ...s.card, background: 'linear-gradient(135deg,#f7f5ff,#fff)' }, className: "card-pop-soft" },
+                    React.createElement("div", { style: s.lbl }, "Member spotlight"),
+                    React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: '10px' } },
+                        React.createElement(AvatarCircle, { avatarId: spotlight.avatar_id, color: spotlight.avatar_color, size: 44 }),
+                        React.createElement("div", { style: { flex: 1 } },
+                            React.createElement("div", { style: { fontSize: '15px', fontWeight: 900, color: '#1a1a2e' } }, spotlight.name),
+                            React.createElement("div", { style: { fontSize: '12px', color: '#7c6af7', fontWeight: 800 } }, getClubTitle(spotlight)),
+                            React.createElement("div", { style: { fontSize: '12px', color: '#666688', marginTop: '3px' } }, spotlight.line)))),
                 React.createElement("div", { className: "ai-fact-card card-pop-soft" },
                     React.createElement("div", { style: { fontSize: '11px', fontWeight: 900, letterSpacing: '.08em', textTransform: 'uppercase', color: '#4d6ea8', marginBottom: '6px' } }, "AI Fact of the Day"),
                     React.createElement("div", { style: { fontSize: '14px', color: '#1a1a2e', lineHeight: 1.6, fontWeight: 700 } }, getAIFactOfDay())),
@@ -3450,6 +3723,21 @@ function getWordleInfo(word) {
     const vowels = (w.match(/[AEIOU]/g) || []).length, unique = new Set(w).size;
     return { meaning: 'A valid five-letter English word used as today’s Claude Club Wordle answer.', clubTake: `Use ${w} as a prompt idea: ask AI to explain it, give examples, and connect it to a real project.`, didYouKnow: `${w} has ${vowels} vowel${vowels === 1 ? '' : 's'} and ${unique === 5 ? 'no repeated letters' : `${5 - unique} repeated letter position${5 - unique === 1 ? '' : 's'}`}.` };
 }
+
+function getWordleResultFeedback(attempts, won) {
+    if (!won) return { label: 'Not today', text: 'The word won this round. Come back tomorrow and take revenge politely.' };
+    const n = Number(attempts) || 6;
+    const map = {
+        1: { label: 'Suspicious genius', text: 'One guess? Either you are psychic, lucky, or quietly terrifying.' },
+        2: { label: 'Sharp operator', text: 'Fast, focused, and slightly intimidating. The leaderboard noticed.' },
+        3: { label: 'Efficient builder', text: 'Clean work. You found the pattern without wasting moves.' },
+        4: { label: 'Solid problem-solver', text: 'Steady guesses, good logic, no panic. That is a proper Claude Club win.' },
+        5: { label: 'Resilient thinker', text: 'You stayed with it, adjusted, and got there. Very bootcamp energy.' },
+        6: { label: 'Clutch save', text: 'Dramatic? Yes. Stressful? Also yes. Still a win.' }
+    };
+    return map[Math.max(1, Math.min(6, n))] || map[6];
+}
+
 function WordleLeaderboard({ memberId, sb }) {
     const today = todayStr();
     const [scores, setScores] = React.useState([]);
@@ -3671,15 +3959,12 @@ function WordleGame({ memberId, memberData, onRefresh, sb, onComplete }) {
         })),
         gameOver && (React.createElement("div", { style: { background: won ? '#f0fff8' : '#fff5f5', border: `1px solid ${won ? '#6af7b8' : '#f76a8a'}`, borderRadius: '14px', padding: '14px', textAlign: 'center', marginBottom: '14px' } },
             React.createElement("div", { style: { fontSize: '18px', fontWeight: '800', color: won ? '#1a5c3a' : '#c0392b', marginBottom: '4px' } }, won ? `Solved in ${guesses.length}/6!` : `The word was ${TARGET}`),
-            won && (React.createElement("div", { style: { background: '#fff', border: '1px solid #d8f5e7', borderRadius: '12px', padding: '11px', margin: '10px 0', textAlign: 'left' } },
-                React.createElement("div", { style: { fontSize: '16px', fontWeight: '900', color: '#1a1a2e', marginBottom: '10px' } }, TARGET),
-                (() => { const info = getWordleInfo(TARGET); return React.createElement(React.Fragment, null,
-                    React.createElement("div", { style: { fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', color: '#1a5c3a' } }, "Meaning"),
-                    React.createElement("div", { style: { fontSize: '12px', lineHeight: 1.5, marginBottom: '9px' } }, info.meaning),
-                    React.createElement("div", { style: { fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', color: '#7c6af7' } }, "Claude Club take"),
-                    React.createElement("div", { style: { fontSize: '12px', lineHeight: 1.5, marginBottom: '9px' } }, info.clubTake),
-                    React.createElement("div", { style: { fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', color: '#b46b16' } }, "Did you know?"),
-                    React.createElement("div", { style: { fontSize: '12px', lineHeight: 1.5 } }, info.didYouKnow)); })())),
+            won && (React.createElement("div", { style: { background: '#fff', border: '1px solid #d8f5e7', borderRadius: '12px', padding: '13px', margin: '10px 0', textAlign: 'left' } },
+                (() => { const result = getWordleResultFeedback(guesses.length, won); return React.createElement(React.Fragment, null,
+                    React.createElement("div", { style: { fontSize: '11px', fontWeight: 900, textTransform: 'uppercase', color: '#1a5c3a', letterSpacing: '.08em' } }, "Your Wordle result"),
+                    React.createElement("div", { style: { fontSize: '17px', fontWeight: '900', color: '#1a1a2e', margin: '5px 0 6px' } }, result.label),
+                    React.createElement("div", { style: { fontSize: '12px', lineHeight: 1.55, color: '#444466' } }, result.text),
+                    React.createElement("div", { style: { fontSize: '12px', lineHeight: 1.5, color: '#7c6af7', fontWeight: 800, marginTop: '9px' } }, "Your score has been added to today’s Wordle leaderboard.")); })())),
             React.createElement("div", { style: { fontSize: '12px', color: '#666688' } }, "Come back tomorrow for a new word"))),
         message && !gameOver && (React.createElement("div", { style: { background: '#fff7e6', border: '1px solid #f7c86a', color: '#7a5c00', borderRadius: '12px', padding: '9px 11px', fontSize: '12px', fontWeight: 800, textAlign: 'center', marginBottom: '10px' } }, message)),
         !gameOver && (React.createElement("div", { style: { display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center', marginBottom: '12px', width: '100%' } }, KEYBOARD_ROWS.map((row, ri) => (React.createElement("div", { key: ri, style: { display: 'flex', gap: '4px', width: '100%', maxWidth: '390px', justifyContent: 'center' } }, row.map(k => {
