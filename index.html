@@ -3711,7 +3711,7 @@ function WordleGame({ memberId, memberData, onRefresh, sb, onComplete }) {
 }
 function App() {
     React.useEffect(() => { window.CLUB_MEMBERS = CLUB_MEMBERS; }, []);
-    const [screen, setScreen] = React.useState('welcome'), [session, setSession] = React.useState(null), [authReady, setAuthReady] = React.useState(false), [authError, setAuthError] = React.useState(''), [memberId, setMemberId] = React.useState(null), [memberData, setMemberData] = React.useState(null), [allMembers, setAllMembers] = React.useState({}), [checkins, setCheckins] = React.useState([]), [allCheckins, setAllCheckins] = React.useState([]), [comments, setComments] = React.useState([]), [notifications, setNotifications] = React.useState([]), [challengeCompletions, setChallengeCompletions] = React.useState([]), [loading, setLoading] = React.useState(false), [needsOnboard, setNeedsOnboard] = React.useState(false), [showHelp, setShowHelp] = React.useState(false), [flaggedMembers, setFlaggedMembers] = React.useState([]), [showVote, setShowVote] = React.useState(false), [loadError, setLoadError] = React.useState(null);
+    const [screen, setScreen] = React.useState('auth-loading'), [session, setSession] = React.useState(null), [authReady, setAuthReady] = React.useState(false), [authError, setAuthError] = React.useState(''), [memberId, setMemberId] = React.useState(null), [memberData, setMemberData] = React.useState(null), [allMembers, setAllMembers] = React.useState({}), [checkins, setCheckins] = React.useState([]), [allCheckins, setAllCheckins] = React.useState([]), [comments, setComments] = React.useState([]), [notifications, setNotifications] = React.useState([]), [challengeCompletions, setChallengeCompletions] = React.useState([]), [loading, setLoading] = React.useState(false), [needsOnboard, setNeedsOnboard] = React.useState(false), [showHelp, setShowHelp] = React.useState(false), [flaggedMembers, setFlaggedMembers] = React.useState([]), [showVote, setShowVote] = React.useState(false), [loadError, setLoadError] = React.useState(null);
     async function loadAll() {
         try {
             setLoadError(null);
@@ -3831,17 +3831,10 @@ function App() {
     async function refresh() { if (!memberId)
         return; const allMd = await loadAll(); const { md, ci } = await loadMember(memberId); if (md)
         setMemberData(md); setCheckins(ci); await checkForFlags(allMd, memberId); }
-    React.useEffect(() => { let mounted = true; sb.auth.getSession().then(async ({ data }) => { if (!mounted)
-        return; setSession(data.session || null); setAuthReady(true); if (data.session)
-        await openLinkedProfile(data.session.user); }); const { data: listener } = sb.auth.onAuthStateChange(async (_event, newSession) => { setSession(newSession || null); setAuthReady(true); if (newSession)
-        await openLinkedProfile(newSession.user);
-    else {
-        setMemberId(null);
-        setMemberData(null);
-        setScreen('welcome');
-    } }); return () => { mounted = false; listener.subscription.unsubscribe(); }; }, []);
+    React.useEffect(() => { let mounted = true; async function bootAuth() { try { const { data } = await sb.auth.getSession(); if (!mounted) return; const currentSession = data.session || null; setSession(currentSession); if (currentSession) { await openLinkedProfile(currentSession.user); } else { setMemberId(null); setMemberData(null); setScreen('welcome'); } } catch (e) { console.warn('Auth boot failed:', e.message || e); setSession(null); setScreen('welcome'); } finally { if (mounted) setAuthReady(true); } } bootAuth(); const { data: listener } = sb.auth.onAuthStateChange(async (event, newSession) => { if (!mounted) return; if (event === 'INITIAL_SESSION') return; setSession(newSession || null); if (newSession) { setAuthReady(false); await openLinkedProfile(newSession.user); if (mounted) setAuthReady(true); } else { setMemberId(null); setMemberData(null); setScreen('welcome'); setAuthReady(true); } }); return () => { mounted = false; listener.subscription.unsubscribe(); }; }, []);
     React.useEffect(() => { const t = setInterval(() => { if (session)
         loadAll(); }, 60000); return () => clearInterval(t); }, [session, memberId]);
+    React.useEffect(() => { if (!session) return; try { window.history.replaceState({ claudeClub: true }, '', window.location.href); } catch (e) {} const keepInsideApp = () => { if (session) { try { window.history.pushState({ claudeClub: true }, '', window.location.href); } catch (e) {} setScreen('dashboard'); } }; window.addEventListener('popstate', keepInsideApp); return () => window.removeEventListener('popstate', keepInsideApp); }, [session]);
     if (!authReady || loading)
         return React.createElement("div", { style: { display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', fontWeight: 900, color: '#7c6af7' } }, "Loading Claude Club...");
     if (showHelp)
@@ -3862,7 +3855,7 @@ function App() {
                     setNeedsOnboard(false);
                 } await loadAll(); }, onBack: signOut });
         return React.createElement(React.Fragment, null,
-            React.createElement(Dashboard, { memberId: memberId, memberData: memberData, checkins: checkins, allMembers: allMembers, allCheckins: allCheckins, comments: comments, notifications: notifications, challengeCompletions: challengeCompletions, onBack: signOut, onRefresh: refresh, onHelp: () => setShowHelp(true), onSignOut: signOut, onResetAccount: async () => { setNeedsOnboard(true); setMemberData(null); } }),
+            React.createElement(Dashboard, { memberId: memberId, memberData: memberData, checkins: checkins, allMembers: allMembers, allCheckins: allCheckins, comments: comments, notifications: notifications, challengeCompletions: challengeCompletions, onBack: () => setScreen('dashboard'), onRefresh: refresh, onHelp: () => setShowHelp(true), onSignOut: signOut, onResetAccount: async () => { setNeedsOnboard(true); setMemberData(null); } }),
             showVote && React.createElement(VoteModal, { flaggedMembers: flaggedMembers, currentMemberId: memberId, allMembers: allMembers, onVoteDone: async () => { setShowVote(false); await refresh(); } }));
     }
     return null;
